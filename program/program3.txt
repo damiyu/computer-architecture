@@ -1,0 +1,288 @@
+// Get the 5-bit pattern
+SET r0 #0
+SET r2 #1
+ROR r2 #3
+LDR r1 r2 // r1 will hold the 5-bit pattern from core[32]
+
+// Initialize core[35:33] to counts 0 and loop idx to 0
+SET r3 #1
+ADD r2 r3
+STR r2 r0 // core[33] = 0
+ADD r2 r3
+STR r2 r0 // core[34] = 0
+ADD r2 r3
+STR r2 r0 // core[35] = 0
+SET r2 #0 // loop idx
+
+// Begin pattern counting by loading idx
+// r1 (pat) and r2 (idx) shouldn't be used
+LDR r3 r2 // message load
+SET r0 #1
+ROR r0 #3
+SET r4 #1
+ADD r0 r4
+LDR r5 r0 // current byte boundary cnt
+
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r3 r4
+SET r4 #1
+ROR r4 #5
+SET RES #1
+ROR RES #1
+ADD RES r4
+BNE r1 r3 // CMP 1
+
+SET r0 #1 // core[33]++
+SET r3 #1
+ROR r3 #3
+ADD r3 r0
+LDR r4 r3
+ADD r4 r0
+STR r3 r4
+
+LDR r3 r2
+ROR r3 #7
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r3 r4
+SET r4 #1
+ROR r4 #5
+SET RES #1
+ROR RES #1
+ADD RES r4
+BNE r1 r3 // CMP 2
+
+SET r0 #1 // core[33]++
+SET r3 #1
+ROR r3 #3
+ADD r3 r0
+LDR r4 r3
+ADD r4 r0
+STR r3 r4
+
+LDR r3 r2
+ROR r3 #6
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r3 r4
+SET r4 #1
+ROR r4 #5
+SET RES #1
+ROR RES #1
+ADD RES r4
+BNE r1 r3 // CMP 3
+
+SET r0 #1 // core[33]++
+SET r3 #1
+ROR r3 #3
+ADD r3 r0
+LDR r4 r3
+ADD r4 r0
+STR r3 r4
+
+LDR r3 r2
+ROR r3 #5
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r3 r4
+SET r4 #1
+ROR r4 #5
+SET RES #1
+ROR RES #1
+ADD RES r4
+BNE r1 r3 // CMP 4
+
+SET r0 #1 // core[33]++
+SET r3 #1
+ROR r3 #3
+ADD r3 r0
+LDR r4 r3
+ADD r4 r0
+STR r3 r4
+
+SET r0 #1
+ROR r0 #3
+SET r3 #1
+ADD r0 r3
+LDR r3 r0 // new byte boundary cnt
+SET r0 #7
+ROR r0 #1
+SET RES #1
+ROR RES #5
+ADD RES r0
+BNE r3 r5 // CMP Byte
+
+// Use look up table to jump to start
+SET r0 #1
+ADD r2 r0
+ROR r0 #3
+BNE r0 r2 // back to top
+
+SET r0 #1
+ROR r0 #1
+SET RES #3
+ROR RES #6
+ADD RES r0
+BNE r0 RES
+
+SET r0 #2 // core[34]++
+SET r3 #1
+ROR r3 #3
+ADD r3 r0
+LDR r4 r3
+SET r0 #1
+ADD r4 r0
+STR r3 r4
+SET RES #5
+ROR RES #6
+BNE r0 RES
+
+SET r2 #0 // r2 (idx) is set to 0
+
+// a new loop reloop
+LDR r3 r2 // second start
+ROR r3 #4
+SET r5 #7
+ROR r5 #7
+SET r0 #1
+ADD r5 r0
+ROR r5 #4 // r5 == 0b1111_0000
+AND r3 r5
+
+MOV r4 r2
+SET r0 #1
+ADD r4 r0
+LDR r4 r4
+AND r4 r5
+ROR r4 #4
+ADD r3 r4 // Save the {[3:0],[7:4]}, so don't touch r3
+
+MOV r5 r3
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r5 r4
+SET r4 #1
+ROR r4 #5
+SET RES #3
+ROR RES #1
+ADD RES r4
+BNE r1 r5 // CMP 5
+
+SET r0 #3 // core[35]++
+SET r4 #1
+ROR r4 #3
+ADD r4 r0
+LDR r5 r4
+SET r0 #1
+ADD r5 r0
+STR r4 r5
+
+MOV r5 r3
+ROR r5 #7
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r5 r4
+SET r4 #1
+ROR r4 #5
+SET RES #3
+ROR RES #1
+ADD RES r4
+BNE r1 r5 // CMP 6
+
+SET r0 #3 // core[35]++
+SET r4 #1
+ROR r4 #3
+ADD r4 r0
+LDR r5 r4
+SET r0 #1
+ADD r5 r0
+STR r4 r5
+
+MOV r5 r3
+ROR r5 #6
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r5 r4
+SET r4 #1
+ROR r4 #5
+SET RES #3
+ROR RES #1
+ADD RES r4
+BNE r1 r5 // CMP 7
+
+SET r0 #3 // core[35]++
+SET r4 #1
+ROR r4 #3
+ADD r4 r0
+LDR r5 r4
+SET r0 #1
+ADD r5 r0
+STR r4 r5
+
+MOV r5 r3
+ROR r5 #5
+SET r0 #3
+SET r4 #7
+ROR r4 #6
+ADD r4 r0
+ROR r4 #5 // r4 == 0b1111_1000
+AND r5 r4
+SET r4 #1
+ROR r4 #5
+SET RES #3
+ROR RES #1
+ADD RES r4
+BNE r1 r5 // CMP 8
+
+SET r0 #3 // core[35]++
+SET r4 #1
+ROR r4 #3
+ADD r4 r0
+LDR r5 r4
+SET r0 #1
+ADD r5 r0
+STR r4 r5
+
+// Use look up table to jump to the top of the second loop
+SET r0 #1
+ADD r2 r0
+SET r3 #3
+ROR r3 #5
+SET r0 #7
+ADD r0 r3
+BNE r0 r2 // back to top
+
+// Add core[35] with core[33]
+SET r0 #1
+SET r3 #1
+ROR r3 #3
+MOV r4 r3
+ADD r4 r0
+LDR r4 r4
+SET r0 #3
+ADD r3 r0
+LDR r5 r3
+ADD r5 r4
+STR r3 r5

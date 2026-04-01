@@ -1,0 +1,568 @@
+SET r1 #0 // starting idx at 0
+
+SET r2 #3
+ROR r2 #5
+SET r3 #3
+ROR r3 #7
+ADD r2 r3
+ADD r2 r1
+LDR r2 r2 // r2 == mem[30 + idx]
+MOV r3 r2
+SET r4 #7
+ROR r4 #3 // r4 == {1110_0000}
+AND r3 r4 // r3 == {b4,b3,b2,0_0000}
+
+SET r4 #1
+ROR r4 #5 // r4 == {0000_1000}
+AND r2 r4
+ROR r2 #7 // r2 == {000,b1,_0000}
+ADD r2 r3
+ROR r2 #4 // r2 == {0000_b4,b3,b2,b1}
+
+SET r0 #3
+ROR r0 #5
+SET r3 #3
+ROR r3 #7
+ADD r3 r0
+SET r0 #1
+ADD r3 r0
+ADD r3 r1
+LDR r3 r3 // r3 == mem[30 + idx + 1]
+ROR r3 #5
+SET r0 #1
+ROR r0 #1
+SET r4 #7
+ROR r4 #4
+ADD r4 r0 // r4 == {1111_0000}
+AND r4 r3 // r4 == {b8,b7,b6,b5_0000}
+ADD r2 r4 // r2 == {b8,b7,b6,b5_b4,b3,b2,b1}
+STR r1 r2 // mem[idx] == [b8:b1]
+
+SET r2 #7
+AND r2 r3 // r2 == {0000_0,b11,b10,b9}
+SET r3 #1
+ADD r3 r1
+STR r3 r2 // mem[idx + 1] == [0000_0{b11:b9}]
+
+SET r0 #3
+ROR r0 #2
+SET r3 #3
+ROR r3 #4
+ADD r3 r0 // r3 == {1111_0000}
+LDR r4 r1 // r4 == mem[idx]
+AND r3 r4 // r3 == {b8,b7,b6,b5_0000}
+MOV r2 r3
+
+SET r3 #1
+ADD r3 r1
+LDR r3 r3 // mem[idx + 1]
+SET r4 #7 // r4 == {0000_0111}
+AND r3 r4 // r3 == {0000_0,b11,b10,b9}
+
+SET r4 #1
+ROR r4 #2
+ADD r2 r3 // r2 == {b8,b7,b6,b5_0,b11,b10,b9}
+STR r4 r6 // store q8 at mem[64]
+
+LDR r2 r1 // r2 == mem[idx]
+SET r0 #1
+ROR r0 #1
+SET r4 #7
+ROR r4 #7
+ADD r4 r0 // r4 == {1000_1110}
+AND r2 r4 // r2 == {b8,000_b4,b3,b2,0}
+
+SET r0 #1
+SET r4 #1
+ROR r4 #2
+ADD r4 r0
+ROR r3 #4 // r3 == {0,b11,b10,b9_0000}
+ADD r2 r3 // r2 == {b8,b11,b10,b9_b4,b3,b2,0}
+STR r4 r6 // store q4 at mem[65]
+
+LDR r2 r1 // r2 == mem[idx]
+SET r0 #3
+ROR r0 #3
+SET r4 #3
+ROR r4 #6
+ADD r4 r0
+SET r0 #1
+ADD r4 r0 // r4 == {0110_1101}
+AND r2 r4 // r2 == {0,b7,b6,0_b4,b3,0,b1}
+SET r4 #3
+ROR r4 #3 // r4 == {0110_0000}
+MOV r5 r2
+AND r4 r5
+ROR r4 #7 // r4 == {b7,b6,00_0000}
+
+SET r0 #1
+SET r5 #3
+ROR r5 #6
+ADD r5 r0 // r5 == {0000_1101}
+AND r2 r5
+ROR r2 #6
+ADD r2 r4 // r2 == {b7,b6,b4,b3,_0,b1,00}
+SET r0 #3
+ROR r3 #5
+AND r3 r0 // r3 == {0000_00,b11,b10}
+SET r0 #2
+SET r4 #1
+ROR r4 #2
+ADD r4 r0
+ADD r2 r3 // r2 == {b7,b6,b4,b3,_0,b1,b11,b10}
+STR r4 r6 // store q2 at mem[66]
+
+LDR r2 r1 // r2 == mem[idx]
+SET r0 #1
+ROR r0 #5
+SET r3 #5
+ROR r3 #4
+ADD r3 r0
+SET r0 #3
+ADD r3 r0 // r3 == {0101_1011}
+AND r2 r3 // r2 == {0,b7,0,b5_b4,0,b2,b1}
+
+MOV r3 r2
+SET r4 #5
+ROR r4 #4
+AND r4 r3
+ROR r4 #7 // r4 == {b7,0,b5,0_0000}
+MOV r5 r4
+ROR r5 #6
+SET r0 #1
+ROR r0 #1
+AND r4 r0
+SET r0 #1
+ROR r0 #1
+AND r5 r0
+ROR r5 #1
+ADD r4 r5 // r4 == {b7,b5,00_0000}
+
+SET r0 #3
+SET r5 #1
+ROR r5 #5
+ADD r5 r0 // r5 == {0000_1011}
+AND r3 r5
+ROR r3 #6 // r3 == {00,b4,0_b2,b1,0,0}
+MOV r2 r3
+ADD r2 r4 // r2 == {b7,b5,b4,0_b2,b1,0,0}
+
+SET r3 #1
+ADD r3 r1
+LDR r3 r3 // r3 == mem[idx + 1]
+SET r4 #7 // r4 == {0000_0111}
+AND r3 r4 // r3 == {0000_0,b11,b10,b9}
+
+MOV r4 r3
+SET r0 #4
+AND r4 r0
+ROR r4 #1 // r4 == {0000_00,b11,0}
+SET r0 #1
+AND r3 r0
+ADD r3 r4 // r3 == {0000_00,b11,b9}
+
+SET r0 #3
+SET r4 #1
+ROR r4 #2
+ADD r4 r0
+ADD r2 r3 // r2 == {b7,b5,b4,0_b2,b1,b11,b9}
+STR r4 r6 // store q1 at mem[67]
+
+
+
+// calculate q0
+SET r0 #3
+ROR r0 #5
+SET r2 #3
+ROR r2 #7
+ADD r2 r0
+ADD r2 r1
+LDR r2 r2 // r2 == mem[30 + idx]
+
+SET r0 #3
+ROR r0 #2
+SET r3 #7
+ROR r3 #5
+ADD r3 r0
+SET r0 #6
+ADD r3 r0 // r3 == {1111_1110}
+AND r2 r3 // r2 == {b4,b3,b2,p4_b1,p2,p1,0}
+SET r0 #4
+SET r4 #1
+ROR r4 #2
+ADD r4 r0
+SET r0 #0
+ADD r2 r0
+STR r4 r6 // mem[68] == parity of {b4:b1,p4:p1}
+
+SET r0 #3
+ROR r0 #5
+SET r3 #3
+ROR r3 #7
+ADD r3 r0
+SET r0 #1
+ADD r3 r0
+ADD r3 r1
+LDR r3 r3 // r3 == mem[30 + idx + 1]
+SET r0 #5
+SET r4 #1
+ROR r4 #2
+ADD r4 r0
+SET r0 #0
+ADD r3 r0
+STR r4 r6 // mem[69] == parity of {b11:b5,p8}
+
+SET r0 #4
+SET r3 #1
+ROR r3 #2
+ADD r3 r0
+LDR r4 r3 // r4 == mem[68] aka parity of {b4:b1,p4:p1}
+SET r0 #1
+ADD r3 r0
+LDR r3 r3 // r3 == mem[69] aka parity of {b11:b5,p8}
+ROR r3 #1
+SET r0 #4
+SET r5 #1
+ROR r5 #2
+ADD r5 r0
+ADD r3 r4 // r3 == {p,000_000,p}
+STR r5 r6 // store q0 at mem[68]
+
+
+
+// Start calculating error bits
+SET r0 #3
+ROR r0 #5
+SET r2 #3
+ROR r2 #7
+ADD r2 r0
+ADD r2 r1
+LDR r2 r2 // r2 == mem[30 + idx]
+
+SET r3 #7 // r3 == {0000_0111}
+AND r3 r2 // r3 == {0000_0,p2,p1,p0}
+SET r0 #1
+ROR r0 #4
+AND r2 r0
+ROR r2 #1 // r2 == {0000_p4,000}
+ADD r2 r3 // r2 == {0000_p4,p2,p1,p0}
+
+SET r0 #3
+ROR r0 #5
+SET r3 #3
+ROR r3 #7
+ADD r3 r0
+SET r0 #1
+ADD r3 r0
+ADD r3 r1
+LDR r3 r3 // r3 == mem[30 + idx + 1]
+SET r0 #1
+AND r3 r0 // r3 == {0000_000,p8}
+ROR r3 #4
+ADD r2 r3 // r2 == {000,p8_p4,p2,p1,p0}
+
+SET r3 #1
+ROR r3 #2
+LDR r3 r3 // r3 == mem[64] aka q8
+ROR r3 #4
+EOR r2 r3 // r2 == {000,s8_p4,p2,p1,p0}
+
+SET r0 #1
+SET r3 #1
+ROR r3 #2
+ADD r3 r0
+LDR r3 r3 // r3 == mem[65] aka q4
+ROR r3 #5
+EOR r2 r3 // r2 == {000,s8_s4,p2,p1,p0}
+
+SET r0 #2
+SET r3 #1
+ROR r3 #2
+ADD r3 r0
+LDR r3 r3 // r3 == mem[66] aka q2
+ROR r3 #6
+EOR r2 r3 // r2 == {000,s8_s4,s2,p1,p0}
+
+SET r0 #3
+SET r3 #1
+ROR r3 #2
+ADD r3 r0
+LDR r3 r3 // r3 == mem[67] aka q1
+ROR r3 #7
+EOR r2 r3 // r2 == {000,s8_s4,s2,s1,p0}
+
+SET r0 #4
+SET r3 #1
+ROR r3 #2
+ADD r3 r0
+LDR r3 r3 // r3 == mem[68] aka q0
+EOR r2 r3 // r2 == {000,s8_s4,s2,s1,s0}
+
+SET r3 #1
+AND r3 r2
+SET r0 #1
+BNE r3 r0 // s0 != 1, no error or two errors go to increment loop
+
+// set one error flag
+SET r3 #1
+ADD r3 r1
+LDR r4 r3 // r4 == mem[idx + 1]
+SET r0 #1
+ROR r0 #2
+ADD r4 r0 // set single error flag
+STR r3 r4 // store the flag
+
+SET r0 #3
+ROR r0 #5
+SET r3 #3
+ROR r3 #7
+ADD r3 r0 // r3 == {0001_1110}
+AND r2 r3
+ROR r2 #1 // r2 == {0000_s8,s4,s2,s1}
+
+// find error
+SET r0 #1
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r3 #3
+BNE r2 r3 // b1 is wrong if {0011}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b1
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #1
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r3 #5
+BNE r2 r3 // b2 is wrong if {0101}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #2
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b2
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #1
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r3 #6
+BNE r2 r3 // b3 is wrong if {0110}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #4
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b3
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r3 #7
+BNE r2 r3 // b4 is wrong if {0111}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+ROR r5 #5
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b4
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #1
+ADD r3 r0
+BNE r2 r3 // b5 is wrong if {1001}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+ROR r5 #4
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b5
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #2
+ADD r3 r0
+BNE r2 r3 // b6 is wrong if {1010}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+ROR r5 #3
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b6
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #3
+ADD r3 r0
+BNE r2 r3 // b7 is wrong if {1011}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+ROR r5 #2
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b7
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #7
+ROR RES #7
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #4
+ADD r3 r0
+BNE r2 r3 // b8 is wrong if {1100}
+
+LDR r4 r1 // r4 == mem[idx] 
+SET r5 #1
+ROR r5 #1
+EOR r4 r5
+STR r1 r4 // mem[idx] is error correct for b8
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #1
+ROR r0 #1
+SET RES #1
+ROR RES #4
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #5
+ADD r3 r0
+BNE r2 r3 // b9 is wrong if {1101}
+
+SET r3 #1
+ADD r3 r1
+LDR r4 r3 // r4 == mem[idx + 1] 
+SET r5 #1
+EOR r4 r5
+STR r3 r4 // mem[idx + 1] is error correct for b9
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #1
+ROR RES #4
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #6
+ADD r3 r0
+BNE r2 r3 // b10 is wrong if {1110}
+
+SET r3 #1
+ADD r3 r1
+LDR r4 r3 // r4 == mem[idx + 1] 
+SET r5 #1
+ROR r5 #7
+EOR r4 r5
+STR r3 r4 // mem[idx + 1] is error correct for b10
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r0 #3
+ROR r0 #1
+SET RES #1
+ROR RES #4
+ADD RES r0
+SET r0 #1
+ROR r0 #5
+SET r3 #7
+ADD r3 r0
+BNE r2 r3 // b11 is wrong if {1111}
+
+SET r3 #1
+ADD r3 r1
+LDR r4 r3 // r4 == mem[idx + 1] 
+SET r5 #1
+ROR r5 #6
+EOR r4 r5
+STR r3 r4 // mem[idx + 1] is error correct for b11
+SET r0 #0
+SET r3 #1
+BNE r0 r3 // always branch to increment idx
+
+SET r2 #0
+SET r3 #1
+BNE r2 r3 // parity error
+
+SET r0 #1 // two error detection
+ROR r0 #1
+SET RES #7
+ADD RES r0
+SET r0 #0
+BNE r2 r0
+
+// no error, skip error setting
+SET r0 #1
+ROR r0 #1
+SET RES #1
+ROR RES #5
+ADD RES r0
+BNE RES r0
+
+SET r2 #1
+ADD r2 r1
+LDR r3 r2 // r2 == mem[idx + 1]
+SET r0 #1
+ROR r0 #1
+ADD r3 r0 // set double error flag
+STR r2 r3 // store the flag
+
+SET r2 #3 // begin increment
+ROR r2 #5
+SET r3 #3
+ROR r3 #7
+ADD r2 r3
+SET r0 #2
+ADD r1 r0
+BNE r1 r2 // idx += 2 and if idx != 30
